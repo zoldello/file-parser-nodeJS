@@ -6,11 +6,16 @@ class File {
         this.filePath = filePath;
     }
     getComponents()  {
-        fs.readFile(this.filePath, 'utf8', componentsCallBack)
+        fs.readFile(this.filePath, 'utf8', this.componentsCallBack)
     }
 
-    componentsCallBack() {
+    componentsCallBack(error, data) {
+        if (error) {
+            console.log('Error reading file: ${this.filePath}');
+            return;
+        }
 
+        console.log(data);
     }
 
 }
