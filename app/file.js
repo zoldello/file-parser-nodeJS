@@ -2,27 +2,21 @@ fs = require('fs');
 _ = require('lodash');
 
 class File {
-
     constructor(filePath) {
         this.filePath = filePath;
         this.components = [];
     }
 
-    getComponents() {
-        if (!!this.components && this.components.length > 0) {
-            return this.components;
-        }
-
-        return this.parseFileForComponents();
+    init() {
+        this.components = this.parseFileForComponents();
     }
 
     parseFileForComponents() {
         // Hack: Synchronous read (normally bad) is neccessary because programm should not do anything until file is read
         let data = fs.readFileSync(this.filePath, 'utf8'),
-        lineByLine = data.split('\n'),
-        separator = ',';
-
-        this.components = [];
+            lineByLine = data.split('\n'),
+            separator = this.getSeparator(this.components),
+            components = [];
 
         for(let line of lineByLine) {
             if (!line) {
@@ -43,42 +37,57 @@ class File {
                 dobDateType: new Date(partDateSplit[2], partDateSplit[1], partDateSplit[0])
             };
 
-            this.components.push(partsJson);
+            components.push(partsJson);
         }
-        return this.components;
+        return components;
+    }
+
+    getSeparator() {
+        // - ordering is important. Some last names contain a space as in "Di Eugenio"; so its important that
+        // space be the last thing considered.
+        // - It is assumed that comma separated fle is the most common use case,
+        // so that should be tested first to add a tiny amount of speed
+        // - Comma is the default behavior
+        if (!this.components || this.components.indexOf(',') !== -1) {
+            return ','
+        } else if ( this.components.indexOf('|') !== -1) {
+            return '|'
+        } else {
+            return ' '
+        }
     }
 
     // Note: This is a bit counterintuitive. It is sorted by last name and then by gender (females first). It is done this way
     // so that females always appear first in the list, without having to break up the list and recombine
-    sortedByGenderThenLastName(components) {
-        if (!components || !components.sort) {
+    sortedByGenderThenLastName() {
+        if (!this.components || !this.components.sort) {
             console.log('No value to sort. Contact support');
             return;
         }
 
-        let sortedByLastName = _.sortBy(components, s => s.lastName.toLowerCase());
+        let sortedByLastName = _.sortBy(this.components, s => s.lastName.toLowerCase());
         let sortedByGender = _.sortBy(sortedByLastName, s => s.gender.toLowerCase());
 
         return sortedByGender;
     }
 
-    sortedByDOB(components) {
-        if (!components) {
+    sortedByDOB() {
+        if (!this.components) {
             console.log('No value to sort. Contact support');
             return;
         }
 
-            return _.sortBy(components, s => s.dobDateType);
+            return _.sortBy(this.components, s => s.dobDateType);
     }
 
-
-sortedByLastName(components) {
-    if (!components) {
+sortedByLastName() {
+    if (!this.components) {
         console.log('No value to sort. Contact support');
         return;
     }
 
-        return _.orderBy(components, ['lastName'], ['desc']);
+        return _.orderBy(this.components, ['lastName'], ['desc']);
     }
 }
+
 module.exports = File;
