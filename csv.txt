@@ -1,1 +1,2 @@
 Jackson, Michael, Male, Blue, 08/25/1958
+Kutcher, Ashton, Male, Red, 01/01/1917

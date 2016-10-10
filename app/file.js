@@ -15,7 +15,18 @@ class File {
             return;
         }
 
-        console.log(data);
+        let lineByLine = data.split('\n'),
+            components = [],
+            separator = ','
+
+        for(let line of lineByLine) {
+            let parts = line.split(separator);
+
+            components.push(parts);
+        }
+
+
+
     }
 
 }
