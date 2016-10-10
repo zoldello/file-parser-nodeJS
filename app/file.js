@@ -1,23 +1,28 @@
 fs = require('fs');
+_ = require('lodash');
 
 class File {
 
     constructor(filePath) {
         this.filePath = filePath;
-    }
-    getComponents()  {
-        fs.readFile(this.filePath, 'utf8', this.componentsCallBack)
+        this.components = [];
     }
 
-    componentsCallBack(error, data) {
-        if (error) {
-            console.log('Error reading file: ${this.filePath}');
-            return;
+    getComponents() {
+        if (!!this.components && this.components.length > 0) {
+            return this.components;
         }
 
-        let lineByLine = data.split('\n'),
-        components = [],
-        separator = ','
+        return this.parseFileForComponents();
+    }
+
+    parseFileForComponents() {
+        // Hack: Synchronous read (normally bad) is neccessary because programm should not do anything until file is read
+        let data = fs.readFileSync(this.filePath, 'utf8'),
+        lineByLine = data.split('\n'),
+        separator = ',';
+
+        this.components = [];
 
         for(let line of lineByLine) {
             if (!line) {
@@ -38,36 +43,42 @@ class File {
                 dobDateType: new Date(partDateSplit[2], partDateSplit[1], partDateSplit[0])
             };
 
-            components.push(partsJson);
+            this.components.push(partsJson);
         }
+        return this.components;
     }
 
     // Note: This is a bit counterintuitive. It is sorted by last name and then by gender (females first). It is done this way
-    // so that females always appear first in the list. Doing it the intuitive way as per method name can result in males coming
-    // before females
-    componentsSortedByGenderThenLastName(components) {
-        if (!components.sort) {
-            console.log('Soring is not supported. You may be using the wrong node.js version or there may be an issue. Contact support');
+    // so that females always appear first in the list, without having to break up the list and recombine
+    sortedByGenderThenLastName(components) {
+        if (!components || !components.sort) {
+            console.log('No value to sort. Contact support');
             return;
         }
 
-        let sortedByLastName = components.sort(a, b) {
-            // case is irrelevant, so equalize
-            let nameA = a.lastName.toUpperCase(),
-                nameB = b.lstName.toUpperCase();
+        let sortedByLastName = _.sortBy(components, s => s.lastName.toLowerCase());
+        let sortedByGender = _.sortBy(sortedByLastName, s => s.gender.toLowerCase());
 
-            if (nameA < nameB) {
-                return -1;
-            }
-
-            if (nameA > nameB) {
-                return 1;
-            }
-
-            return 0;
-        }
+        return sortedByGender;
     }
 
-}
+    sortedByDOB(components) {
+        if (!components) {
+            console.log('No value to sort. Contact support');
+            return;
+        }
 
+            return _.sortBy(components, s => s.dobDateType);
+    }
+
+
+sortedByLastName(components) {
+    if (!components) {
+        console.log('No value to sort. Contact support');
+        return;
+    }
+
+        return _.orderBy(components, ['lastName'], ['desc']);
+    }
+}
 module.exports = File;

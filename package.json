@@ -16,5 +16,8 @@
     "separated"
   ],
   "author": "Philip Adenekan",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "lodash": "^4.16.4"
+  }
 }
