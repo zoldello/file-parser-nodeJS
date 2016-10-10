@@ -20,12 +20,28 @@ class File {
             separator = ','
 
         for(let line of lineByLine) {
-            let parts = line.split(separator);
+            if (!line) {
+                continue;
+            }
 
-            components.push(parts);
+            let parts = line.split(separator),
+                partDateSplit = parts[4].split('/');
+
+                // dob-dateType was made so that date conversion need not be done repeated
+                // when date value is needed for things like sorting
+                let partsJson = {
+                    lastName: parts[0],
+                    firstName: parts[1],
+                    gender: parts[2],
+                    favoriteColor: parts[3],
+                    dob: parts[4],
+                    dobDateType: new Date(partDateSplit[2], partDateSplit[1], partDateSplit[0])
+                };
+
+            components.push(partsJson);
         }
 
-
+console.log(components[1].dobDateType);
 
     }
 
