@@ -1,7 +1,7 @@
 var main = require('./app/main');
 
 var startupMesssage = () => {
-    return 'Philip Adenekan | File Parser \n';
+    return `Philip Adenekan | File Parser\n`;
 }
 
 console.log(startupMesssage());

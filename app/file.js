@@ -8,14 +8,28 @@ class File {
     }
 
     init() {
-        this.components = this.parseFileForComponents();
+        this.components = this._parseFileForComponents();
     }
 
-    parseFileForComponents() {
+    getComponents() {
+        return this.components;
+    }
+
+    _trimEnd(str, char) {
+        let  strTrim = str.trim();
+
+        if (!strTrim || strTrim[strTrim.length - 1] !== char) {
+            return strTrim;
+        }
+
+        return strTrim.slic(0, -1);
+    }
+
+    _parseFileForComponents() {
         // Hack: Synchronous read (normally bad) is neccessary because programm should not do anything until file is read
         let data = fs.readFileSync(this.filePath, 'utf8'),
             lineByLine = data.split('\n'),
-            separator = this.getSeparator(this.components),
+            separator = this._getSeparator(lineByLine[0]),
             components = [];
 
         for(let line of lineByLine) {
@@ -29,12 +43,14 @@ class File {
             // dob-dateType was made so that date conversion need not be done repeated
             // when date value is needed for things like sorting
             let partsJson = {
-                lastName: parts[0],
-                firstName: parts[1],
-                gender: parts[2],
-                favoriteColor: parts[3],
-                dob: parts[4],
-                dobDateType: new Date(partDateSplit[2], partDateSplit[1], partDateSplit[0])
+                lastName: this._trimEnd(parts[0], separator),
+                firstName: this._trimEnd(parts[1], separator),
+                gender: this._trimEnd(parts[2], separator),
+                favoriteColor: this._trimEnd(parts[3], separator),
+                dob: this._trimEnd(parts[4], separator),
+                dobDateType: new Date(this._trimEnd(partDateSplit[2], separator),
+                    this._trimEnd(partDateSplit[1], separator),
+                    this._trimEnd(partDateSplit[0], separator))
             };
 
             components.push(partsJson);
@@ -42,15 +58,15 @@ class File {
         return components;
     }
 
-    getSeparator() {
+    _getSeparator(row) {
         // - ordering is important. Some last names contain a space as in "Di Eugenio"; so its important that
         // space be the last thing considered.
         // - It is assumed that comma separated fle is the most common use case,
         // so that should be tested first to add a tiny amount of speed
         // - Comma is the default behavior
-        if (!this.components || this.components.indexOf(',') !== -1) {
+        if (!row || row.indexOf(',') !== -1) {
             return ','
-        } else if ( this.components.indexOf('|') !== -1) {
+        } else if ( row.indexOf('|') !== -1) {
             return '|'
         } else {
             return ' '
@@ -61,7 +77,7 @@ class File {
     // so that females always appear first in the list, without having to break up the list and recombine
     sortedByGenderThenLastName() {
         if (!this.components || !this.components.sort) {
-            console.log('No value to sort. Contact support');
+            console.error('No value to sort. Contact support');
             return;
         }
 
@@ -73,7 +89,7 @@ class File {
 
     sortedByDOB() {
         if (!this.components) {
-            console.log('No value to sort. Contact support');
+            console.error('No value to sort. Contact support');
             return;
         }
 
@@ -82,7 +98,7 @@ class File {
 
 sortedByLastName() {
     if (!this.components) {
-        console.log('No value to sort. Contact support');
+        console.error('No value to sort. Contact support');
         return;
     }
 
