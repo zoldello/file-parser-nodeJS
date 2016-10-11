@@ -20,10 +20,14 @@ How to use
 --------------------------------------
 - Run:
 ```bash
-node index someFile.txt
+node index ./fullPath/someFile.txt
 ```
 
-where someFile.txt is a comma, space or piple separated file
+where someFile.txt is a comma, space or piple separated file. You can use sample files like:
+./sample-comma.txt
+./sample-csv.txt
+./sample-pipe.txt
+
 
 - To run GET API,  use there in a browser:
     - http://localhost:8081/records/name
