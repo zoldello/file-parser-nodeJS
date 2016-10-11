@@ -40,7 +40,7 @@ module.exports =  {
             console.log(`File Parser listening at http://${host}:${port}`);
         });
     }
-}
+};
 
 /*
 POST /records - Post a single data line in any of the 3 formats supported by your existing code

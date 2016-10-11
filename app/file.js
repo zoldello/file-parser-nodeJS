@@ -65,11 +65,11 @@ class File {
         // so that should be tested first to add a tiny amount of speed
         // - Comma is the default behavior
         if (!row || row.indexOf(',') !== -1) {
-            return ','
+            return ',';
         } else if ( row.indexOf('|') !== -1) {
-            return '|'
+            return '|';
         } else {
-            return ' '
+            return ' ';
         }
     }
 
