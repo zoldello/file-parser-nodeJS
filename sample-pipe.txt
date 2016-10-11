@@ -1,0 +1,3 @@
+Kutcher | Ashton | Male | Red | 01/01/1917
+Jackson | Michael | Male | Blue | 08/25/1958
+Kunis | Mila| Female|  Pink | 03/04/1953

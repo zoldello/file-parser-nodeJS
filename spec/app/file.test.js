@@ -81,4 +81,30 @@ describe('file', function() {
         expect(components[2].lastName).toEqual('Jackson');
     });
 
+    it('should add' , () => {
+        let file = new File('./spec/support/sample.add.txt');
+        file.init();
+
+/*
+        let componentsParts = {
+            lastName: 'Smith',
+            firstName: 'Jeffrey',
+            gender: 'Male',
+            favoriteColor: 'Brown',
+            dob: '01/01/1996'
+        }
+        */
+
+    file.add( "Smith, Jeffrey, Male, Brown, 01/01/1996"   );
+
+let components = file.getComponents();
+
+        expect(components[1].lastName).toEqual('Smith');
+        expect(components[1].firstName).toEqual('Jeffrey');
+        expect(components[1].gender).toEqual('Male');
+        expect(components[1].favoriteColor).toEqual('Brown');
+        expect(components[1].dob).toEqual('01/01/1996');
+    });
+
+
 });
