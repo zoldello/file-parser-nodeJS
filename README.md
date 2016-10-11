@@ -10,12 +10,14 @@ How to set up
 
 How to Test and Link
 --------------------------------------
+Run:
 ```bash
-Run: gulp
+ gulp
 ```
 
 How to use
 --------------------------------------
+Run:
 ```bash
 node index someFile.txt
 ```
