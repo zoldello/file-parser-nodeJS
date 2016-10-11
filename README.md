@@ -1,4 +1,4 @@
-[File Parser in node.js]
+File Parser in node.js
 ==================================================
 
 How to set up
