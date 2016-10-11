@@ -73,6 +73,26 @@ class File {
         }
     }
 
+    add(componentParts) {
+        let separator = this._getSeparator(componentParts);
+        let parts = componentParts.split(separator);
+
+        let partDateSplit = parts[4].split('/');
+
+        let partsJson = {
+            lastName: this._trimEnd(parts[0], separator),
+            firstName: this._trimEnd(parts[1], separator),
+            gender: this._trimEnd(parts[2], separator),
+            favoriteColor: this._trimEnd(parts[3], separator),
+            dob: this._trimEnd(parts[4], separator),
+            dobDateType: new Date(this._trimEnd(partDateSplit[2], separator),
+                this._trimEnd(partDateSplit[1], separator),
+                this._trimEnd(partDateSplit[0], separator))
+        };
+
+        this.components.push(partsJson);
+    }
+
     // Note: This is a bit counterintuitive. It is sorted by last name and then by gender (females first). It is done this way
     // so that females always appear first in the list, without having to break up the list and recombine
     sortedByGenderThenLastName() {

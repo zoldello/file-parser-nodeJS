@@ -24,13 +24,6 @@ describe('api', function() {
     });
 
     it(`something`, () => {
-        let file = new File('./spec/support/sample-pipe.txt');
-        file.init();
-
-        expressMock.expects("get").once();
-
-    api.bootup();
-
 
     } );
 

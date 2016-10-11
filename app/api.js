@@ -1,6 +1,4 @@
 let express = require('express');
-let fs = require('fs');
-
 
 module.exports =  {
     bootup:  function(file)  {
@@ -22,6 +20,18 @@ module.exports =  {
             let sortedByName = file.sortedByLastName();
 
             response.json(sortedByName);
+        });
+
+        app.post('/records', (request, response) => {
+            let data = request.query.data;
+
+//console.log(request.query.data);
+
+            file.add(data);
+
+            let components = file.getComponents();
+
+            response.end( JSON.stringify( components )  );
         });
 
         let server = app.listen(8081, function () {
