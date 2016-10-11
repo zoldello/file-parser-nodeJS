@@ -44,3 +44,9 @@ lastName, firstName, gender, favoriteColor, birthDay
 
 For example:
 Jackson,  Michael,  Male, Blue,  08/25/1958
+
+
+TODO
+--------------------------------------
+- Increaase unit test coverage
+- API calls not unit test, partially due to primary calls are in a unit tested file. Need to figure out how to much require better.
